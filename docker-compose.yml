@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  # MySQL Database Service
+  prescription_mysql:
+    image: mysql:8.0
+    container_name: prescription_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: prescription_db
+      MYSQL_USER: prescription_user
+      MYSQL_PASSWORD: prescription_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - prescription_network
+    restart: unless-stopped
+
+  # Prescription Service Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: prescription_service
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: prescription_user
+      DB_PASSWORD: prescription_pass
+      DB_NAME: prescription_db
+      DEBUG: "false"
+    ports:
+      - "8000:8000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./seed_data:/app/seed_data:ro
+    networks:
+      - prescription_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  prescription_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
+
