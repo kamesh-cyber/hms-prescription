@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   # MySQL Database Service
-  prescription_mysql:
+  prescription_database:
     image: mysql:8.0
     container_name: prescription_mysql
     environment:
@@ -11,7 +11,7 @@ services:
       MYSQL_USER: prescription_user
       MYSQL_PASSWORD: prescription_pass
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
@@ -32,19 +32,19 @@ services:
       dockerfile: Dockerfile
     container_name: prescription_service
     environment:
-      DB_HOST: mysql
-      DB_PORT: 3306
+      DB_HOST: host.docker.internal
+      DB_PORT: 3307
       DB_USER: prescription_user
       DB_PASSWORD: prescription_pass
       DB_NAME: prescription_db
       DEBUG: "false"
     ports:
-      - "8000:8000"
+      - "3001:3001"
     depends_on:
-      mysql:
+      prescription_database:
         condition: service_healthy
-    volumes:
-      - ./seed_data:/app/seed_data:ro
+#    volumes:
+#      - ./seed_data:/app/seed_data:ro
     networks:
       - prescription_network
     restart: unless-stopped

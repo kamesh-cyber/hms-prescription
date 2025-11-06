@@ -20,6 +20,7 @@ def wait_for_db(max_retries: int = 30, delay: int = 2):
     retries = 0
     while retries < max_retries:
         try:
+            print(f"Connecting to database at {settings.database_url}...")
             test_engine = create_engine(settings.database_url)
             with test_engine.connect() as conn:
                 conn.execute(text("SELECT 1"))

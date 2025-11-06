@@ -6,8 +6,8 @@ class Settings(BaseSettings):
     """Application settings"""
 
     # Database settings
-    DB_HOST: str = "mysql"
-    DB_PORT: int = 3306
+    DB_HOST: str = "host.docker.internal"
+    DB_PORT: int = 3307
     DB_USER: str = "prescription_user"
     DB_PASSWORD: str = "prescription_pass"
     DB_NAME: str = "prescription_db"
@@ -26,8 +26,7 @@ class Settings(BaseSettings):
         case_sensitive = True
 
 
-@lru_cache()
+
 def get_settings() -> Settings:
-    """Get cached settings instance"""
     return Settings()
 
