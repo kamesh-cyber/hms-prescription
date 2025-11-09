@@ -5,7 +5,7 @@ from typing import Optional
 
 class PrescriptionBase(BaseModel):
     """Base prescription schema"""
-    appointment_id: int = Field(..., gt=0, description="Appointment ID")
+    appointment_id: str = Field(..., min_length=1, max_length=50, description="Appointment ID")
     patient_id: int = Field(..., gt=0, description="Patient ID")
     doctor_id: int = Field(..., gt=0, description="Doctor ID")
     medication: str = Field(..., min_length=1, max_length=255, description="Medication name")

@@ -67,7 +67,7 @@ class PrescriptionService:
         limit: int = 100,
         patient_id: Optional[int] = None,
         doctor_id: Optional[int] = None,
-        appointment_id: Optional[int] = None
+        appointment_id: Optional[str] = None
     ) -> tuple[List[Prescription], int]:
         """
         Get prescriptions with optional filters
@@ -132,7 +132,7 @@ class PrescriptionService:
     @staticmethod
     def get_prescriptions_by_appointment(
         db: Session,
-        appointment_id: int
+        appointment_id: str
     ) -> List[Prescription]:
         """Get all prescriptions for a specific appointment"""
         prescriptions, _ = PrescriptionService.get_prescriptions(

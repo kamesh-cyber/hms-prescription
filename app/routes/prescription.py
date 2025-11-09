@@ -86,7 +86,7 @@ def get_prescriptions(
     limit: int = Query(100, ge=1, le=500, description="Maximum number of records to return"),
     patient_id: Optional[int] = Query(None, description="Filter by patient ID"),
     doctor_id: Optional[int] = Query(None, description="Filter by doctor ID"),
-    appointment_id: Optional[int] = Query(None, description="Filter by appointment ID"),
+    appointment_id: Optional[str] = Query(None, description="Filter by appointment ID"),
     db: Session = Depends(get_db)
 ):
     """
@@ -98,8 +98,8 @@ def get_prescriptions(
     - **doctor_id**: Filter prescriptions by doctor ID
     - **appointment_id**: Filter prescriptions by appointment ID
     """
+    logger.info(f"Fetching prescriptions with filters: patient_id={patient_id}, doctor_id={doctor_id}, appointment_id={appointment_id}, skip={skip}, limit={limit}")
     prescriptions, total = PrescriptionService.get_prescriptions(
-        db=db,
         skip=skip,
         limit=limit,
         patient_id=patient_id,
@@ -181,7 +181,7 @@ def get_doctor_prescriptions(
     summary="Get all prescriptions for an appointment"
 )
 def get_appointment_prescriptions(
-    appointment_id: int,
+    appointment_id: str,
     db: Session = Depends(get_db)
 ):
     """
@@ -189,10 +189,12 @@ def get_appointment_prescriptions(
 
     - **appointment_id**: The ID of the appointment
     """
+    logger.info(f"Fetching prescriptions for appointment_id={appointment_id}")
     prescriptions = PrescriptionService.get_prescriptions_by_appointment(
         db=db,
         appointment_id=appointment_id
     )
 
+    logger.info(f"Successfully fetched {len(prescriptions)} prescriptions for appointment_id={appointment_id}")
     return prescriptions
 

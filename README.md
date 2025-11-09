@@ -21,7 +21,7 @@ A microservice for managing medical prescriptions in a Hospital Management Syste
 | Column           | Type         | Description                          |
 |------------------|--------------|--------------------------------------|
 | prescription_id  | INTEGER      | Primary key                          |
-| appointment_id   | INTEGER      | Foreign key to appointment (required)|
+| appointment_id   | VARCHAR(50)  | Foreign key to appointment (required)|
 | patient_id       | INTEGER      | Patient identifier                   |
 | doctor_id        | INTEGER      | Doctor identifier                    |
 | medication       | VARCHAR(255) | Medication name                      |
@@ -97,7 +97,7 @@ POST /api/v1/prescriptions/
 Content-Type: application/json
 
 {
-  "appointment_id": 1,
+  "appointment_id": "APPT-001",
   "patient_id": 101,
   "doctor_id": 5,
   "medication": "Amoxicillin",

@@ -9,7 +9,7 @@ class Prescription(Base):
     __tablename__ = "prescriptions"
 
     prescription_id = Column(Integer, primary_key=True, index=True)
-    appointment_id = Column(Integer, nullable=False, index=True)
+    appointment_id = Column(String(50), nullable=False, index=True)
     patient_id = Column(Integer, nullable=False, index=True)
     doctor_id = Column(Integer, nullable=False, index=True)
     medication = Column(String(255), nullable=False)

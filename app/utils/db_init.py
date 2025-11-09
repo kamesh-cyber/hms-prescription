@@ -73,7 +73,7 @@ def seed_prescriptions(db: Session, csv_file_path: str):
 
             prescription = Prescription(
                 prescription_id=int(row['prescription_id']),
-                appointment_id=int(row['appointment_id']),
+                appointment_id=str(row['appointment_id']),
                 patient_id=int(row['patient_id']),
                 doctor_id=int(row['doctor_id']),
                 medication=row['medication'],
